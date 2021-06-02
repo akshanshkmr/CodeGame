@@ -55,8 +55,7 @@ def about_dev():
     """,unsafe_allow_html=True)
 
 def get_score():
-#     scores_file = os.path.dirname(os.path.realpath(__file__)) + '/scores.json'
-    scores_file = '/tmp/scores.json'
+    scores_file = os.path.dirname(os.path.realpath(__file__)) + '/scores.json'
     ctx = get_report_ctx()
     session_id = ctx.session_id
     with open(scores_file) as f:
@@ -68,8 +67,7 @@ def get_score():
         return '0/0'
 
 def update_score(score):
-#     scores_file = os.path.dirname(os.path.realpath(__file__)) + '/scores.json'
-    scores_file = '/tmp/scores.json'
+    scores_file = os.path.dirname(os.path.realpath(__file__)) + '/scores.json'
     ctx = get_report_ctx()
     session_id = ctx.session_id
     with open(scores_file) as f:

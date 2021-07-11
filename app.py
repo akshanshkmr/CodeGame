@@ -3,10 +3,8 @@ import random
 import requests
 from time import sleep
 from streamlit import caching
-from streamlit.report_thread import get_report_ctx
-import os, json
 
-Languages = ['C', 'C++', 'C#', 'Go', 'Java', 'Javascript', 'Shell', 'Ruby', 'Python', 'Perl', 'Html', 'CSS', 'null', None]
+Languages = ['C', 'C++', 'C#', 'Go', 'Java', 'JavaScript', 'Shell', 'Ruby', 'Python', 'Perl', 'Html', 'CSS', 'null', None]
 
 def get_random_gist_url():
     id = random.randint(5000, 10000)
@@ -55,40 +53,19 @@ def about_dev():
     """,unsafe_allow_html=True)
 
 def get_score():
-    scores_file = os.path.dirname(os.path.realpath(__file__)) + '/scores.json'
-    ctx = get_report_ctx()
-    session_id = ctx.session_id
-    with open(scores_file) as f:
-        data = json.load(f)
-    if session_id in data.keys():
-        score = str(data[session_id]['correct']) + "/" + str(data[session_id]['total'])
+    if 'total' in st.session_state:
+        score = str(st.session_state['correct']) + "/" + str(st.session_state['total'])
         return score
     else:
         return '0/0'
 
 def update_score(score):
-    scores_file = os.path.dirname(os.path.realpath(__file__)) + '/scores.json'
-    ctx = get_report_ctx()
-    session_id = ctx.session_id
-    with open(scores_file) as f:
-        data = json.load(f)
-        if session_id in data.keys():
-            total = data[session_id]['total']
-            correct = data[session_id]['correct']
-            total+=1
-            correct +=score
-        else:
-            total=1
-            correct=score
-    with open(scores_file, 'w') as f:
-        data.update({
-            session_id:{
-                'total':total,
-                'correct':correct
-            }
-        })
-        json.dump(data, f)
-
+    if 'total' in st.session_state:
+        st.session_state['total'] = st.session_state.total + 1
+        st.session_state['correct'] = st.session_state.correct + score
+    else:
+        st.session_state['total'] =  1
+        st.session_state['correct'] = score
 
 if __name__ == "__main__":
     st.set_page_config(page_title="CodeGame", layout='wide')
